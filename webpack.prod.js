@@ -1,19 +1,15 @@
-const common = require('./webpack.common.js');
 const { merge } = require('webpack-merge');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const common = require('./webpack.common');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = merge(common, {
   mode: 'production',
+  devtool: 'source-map',
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
-      },
+      // Aturan untuk Babel (JavaScript modern)
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -26,10 +22,25 @@ module.exports = merge(common, {
           },
         ],
       },
+      // Aturan untuk CSS (INI YANG KURANG SEBELUMNYA)
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Ekstrak CSS jadi file terpisah
+          'css-loader', // Baca import CSS
+        ],
+      },
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin(),
+    // Plugin untuk menghasilkan file CSS fisik
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+    }),
+    // Plugin PWA Service Worker
+    new WorkboxWebpackPlugin.InjectManifest({
+      swSrc: path.resolve(__dirname, 'src/scripts/sw.js'),
+      swDest: 'sw.js',
+    }),
   ],
 });
