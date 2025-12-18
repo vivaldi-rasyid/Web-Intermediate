@@ -41,8 +41,6 @@ const requestNotificationPermission = async () => {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       console.log('Notification permission granted.');
-      // Optional: Test notification
-      // new Notification('Hello from Story App!');
     } else {
       console.log('Notification permission denied.');
     }

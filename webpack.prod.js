@@ -9,7 +9,6 @@ module.exports = merge(common, {
   devtool: 'source-map',
   module: {
     rules: [
-      // Aturan untuk Babel (JavaScript modern)
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -22,12 +21,11 @@ module.exports = merge(common, {
           },
         ],
       },
-      // Aturan untuk CSS (INI YANG KURANG SEBELUMNYA)
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader, // Ekstrak CSS jadi file terpisah
-          'css-loader', // Baca import CSS
+          MiniCssExtractPlugin.loader, 
+          'css-loader', 
         ],
       },
     ],

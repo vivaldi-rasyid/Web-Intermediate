@@ -1,5 +1,5 @@
 import { openDB } from 'idb';
-import CONFIG from '../config'; // <--- Path yang benar sesuai struktur Anda
+import CONFIG from '../config';
 
 const { DATABASE_NAME, DATABASE_VERSION, OBJECT_STORE_NAME } = CONFIG;
 

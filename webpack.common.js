@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// HAPUS baris import WorkboxWebpackPlugin dari sini
 
 module.exports = {
   entry: {
@@ -36,6 +35,5 @@ module.exports = {
         },
       ],
     }),
-    // HAPUS bagian new WorkboxWebpackPlugin.InjectManifest(...) dari sini
   ],
 };

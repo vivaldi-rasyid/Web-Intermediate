@@ -38,7 +38,6 @@ registerRoute(
   })
 );
 
-// 4. Handle Push Notification (Kriteria 2 Requirement)
 self.addEventListener('push', (event) => {
   let body;
   if (event.data) {
