@@ -1,6 +1,8 @@
 import L from 'leaflet';
 import StoryApi from '../../data/api';
 import { showFormattedDate } from '../../utils/index';
+// 1. Import helper IndexedDB
+import FavoriteStoryIdb from '../../data/favorite-story-idb';
 
 export default class HomePage {
   #map = null;
@@ -58,16 +60,31 @@ export default class HomePage {
     }
 
     this.#stories.forEach((story) => {
-      container.innerHTML += `
-        <article class="story-item">
-          <img src="${story.photoUrl}" alt="Cerita oleh ${story.name}: ${story.description.substring(0, 30)}..." class="story-item__image">
-          <div class="story-item__content">
-            <h3 class="story-item__name">${story.name}</h3>
-            <p class="story-item__date">${showFormattedDate(story.createdAt)}</p>
-            <p class="story-item__description">${story.description}</p>
-          </div>
-        </article>
+      // Kita buat elemen HTML manual agar mudah pasang event listener tombol
+      const storyItem = document.createElement('article');
+      storyItem.classList.add('story-item');
+      
+      storyItem.innerHTML = `
+        <img src="${story.photoUrl}" alt="Cerita oleh ${story.name}" class="story-item__image">
+        <div class="story-item__content">
+          <h3 class="story-item__name">${story.name}</h3>
+          <p class="story-item__date">${showFormattedDate(story.createdAt)}</p>
+          <p class="story-item__description">${story.description}</p>
+          
+          <button class="btn-favorite" style="margin-top: 10px; padding: 8px 16px; background-color: #d84315; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            ❤️ Simpan ke Favorit
+          </button>
+        </div>
       `;
+
+      // Event Listener Tombol Simpan
+      const saveBtn = storyItem.querySelector('.btn-favorite');
+      saveBtn.addEventListener('click', async () => {
+        await FavoriteStoryIdb.putStory(story);
+        alert('Cerita berhasil disimpan ke halaman Favorit!');
+      });
+
+      container.appendChild(storyItem);
     });
   }
 

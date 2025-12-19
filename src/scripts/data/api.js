@@ -65,6 +65,20 @@ class StoryApi {
 
     return response.json();
   }
+
+  static async subscribePush(subscription) {
+    const token = Auth.getToken();
+    const response = await fetch(`${CONFIG.BASE_URL}notifications/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(subscription),
+    });
+
+    return response.json();
+  }
 }
 
 export default StoryApi;
