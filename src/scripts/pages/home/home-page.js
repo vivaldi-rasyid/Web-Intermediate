@@ -1,7 +1,6 @@
 import L from 'leaflet';
 import StoryApi from '../../data/api';
 import { showFormattedDate } from '../../utils/index';
-// 1. Import helper IndexedDB
 import FavoriteStoryIdb from '../../data/favorite-story-idb';
 
 export default class HomePage {
@@ -60,7 +59,6 @@ export default class HomePage {
     }
 
     this.#stories.forEach((story) => {
-      // Kita buat elemen HTML manual agar mudah pasang event listener tombol
       const storyItem = document.createElement('article');
       storyItem.classList.add('story-item');
       

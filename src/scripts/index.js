@@ -43,7 +43,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// --- LOGIKA PUSH NOTIFICATION (KRITERIA 2) ---
+// --- LOGIKA PUSH NOTIFICATION ---
 
 // 1. Helper untuk mengubah VAPID Key
 const urlBase64ToUint8Array = (base64String) => {
@@ -77,11 +77,10 @@ const initPushNotification = async () => {
     // Cek apakah user sudah subscribe sebelumnya
     let subscription = await registration.pushManager.getSubscription();
     
-    // Jika belum, lakukan subscribe ke Browser (Chrome/Firefox)
+    // Jika belum, lakukan subscribe ke Browser
     if (!subscription) {
       console.log('Melakukan subscribe ke Push Manager...');
       
-      // Pastikan PUSH_MSG_VAPID_PUBLIC_KEY ada di config.js
       if (!CONFIG.PUSH_MSG_VAPID_PUBLIC_KEY) {
         console.error('VAPID Key belum dipasang di config.js!');
         return;
@@ -93,12 +92,9 @@ const initPushNotification = async () => {
       });
     }
 
-    // 3. KIRIM DATA SUBSCRIPTION KE SERVER DICODING (Permintaan Reviewer)
-    // Kita hanya kirim jika User sedang Login (punya Token)
     if (Auth.getToken()) {
       const subscriptionJson = subscription.toJSON();
       
-      // Format data sesuai spesifikasi API Dicoding
       const subscriptionData = {
         endpoint: subscriptionJson.endpoint,
         keys: {
@@ -129,7 +125,7 @@ const requestNotificationPermission = async () => {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       console.log('Izin notifikasi diberikan.');
-      await initPushNotification(); // Jalankan logika subscribe
+      await initPushNotification();
     } else {
       console.log('Izin notifikasi ditolak.');
     }

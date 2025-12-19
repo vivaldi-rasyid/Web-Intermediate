@@ -1,5 +1,5 @@
 import FavoriteStoryIdb from '../../data/favorite-story-idb';
-import { showFormattedDate } from '../../utils/index'; // Opsional: untuk format tanggal
+import { showFormattedDate } from '../../utils/index';
 
 class FavoritePage {
   async render() {
