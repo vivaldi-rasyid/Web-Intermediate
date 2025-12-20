@@ -1,50 +1,59 @@
 import StoryApi from '../../data/api';
 import Auth from '../../utils/auth';
 
-export default class LoginPage {
+const LoginPage = {
   async render() {
     return `
       <section class="container auth-container">
-        <h1>Login</h1>
-        <form id="login-form" class="auth-form">
+        <h2 class="auth-title">Login</h2>
+        <form id="loginForm" class="auth-form">
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" required placeholder="Masukkan email Anda">
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" required minlength="8">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" required placeholder="Masukkan password Anda">
           </div>
-          <button type="submit">Login</button>
-          <p class="auth-switch">Belum punya akun? <a href="#/register">Register di sini</a></p>
-          <p id="error-message" class="error-message" aria-live="polite"></p>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
         </form>
+        <p class="auth-footer">Belum punya akun? <a href="#/register">Daftar di sini</a></p>
       </section>
     `;
-  }
+  },
 
   async afterRender() {
-    document.title = 'Login - App';
-    const loginForm = document.querySelector('#login-form');
-    const errorMessage = document.querySelector('#error-message');
+    const loginForm = document.querySelector('#loginForm');
+    
+    if (!loginForm) return;
 
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+      
       const email = document.querySelector('#email').value;
       const password = document.querySelector('#password').value;
 
       try {
         const response = await StoryApi.login({ email, password });
-        if (response.error) {
-          throw new Error(response.message);
-        }
+        
+        if (!response.error) {
+          Auth.storeToken(response.loginResult.token);
+          Auth.storeUser(response.loginResult.name);
+          
+          alert('Login berhasil!');
 
-        Auth.setToken(response.loginResult.token);
-        document.dispatchEvent(new Event('auth-change')); 
-        window.location.hash = '#/';
+          window.dispatchEvent(new Event('auth-change'));
+          
+          window.location.hash = '#/';
+        } else {
+          alert(`Login gagal: ${response.message}`);
+        }
       } catch (error) {
-        errorMessage.textContent = `Login Gagal: ${error.message}`;
+        console.error(error);
+        alert('Terjadi kesalahan saat login.');
       }
     });
-  }
-}
+  },
+};
+
+export default LoginPage;

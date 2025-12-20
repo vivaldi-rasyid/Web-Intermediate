@@ -1,15 +1,23 @@
 const Auth = {
-  setToken(token) {
-    localStorage.setItem('authToken', token);
+  storeToken(token) {
+    localStorage.setItem('token', token);
   },
 
   getToken() {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('token');
   },
 
   removeToken() {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
   },
+  
+  storeUser(name) {
+    localStorage.setItem('user', name);
+  },
+  
+  getUser() {
+    return localStorage.getItem('user');
+  }
 };
 
 export default Auth;

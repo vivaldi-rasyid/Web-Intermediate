@@ -6,12 +6,13 @@ import AddStoryPage from '../pages/add-story/add-story-page';
 import FavoritePage from '../pages/favorite/favorite-page';
 
 const routes = {
-  '/': new HomePage(),
-  '/about': new AboutPage(),
-  '/login': new LoginPage(),
-  '/register': new RegisterPage(),
-  '/add-story': new AddStoryPage(),
-  '/favorite': new FavoritePage(),
+  '/': HomePage,
+  '/home': HomePage,
+  '/about': AboutPage,
+  '/login': LoginPage,
+  '/register': RegisterPage,
+  '/add-story': AddStoryPage,
+  '/favorite': FavoritePage,
 };
 
 export default routes;

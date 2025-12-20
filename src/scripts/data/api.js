@@ -2,10 +2,10 @@ import CONFIG from '../config';
 import Auth from '../utils/auth';
 
 const API_ENDPOINTS = {
-  REGISTER: `${CONFIG.BASE_URL}/register`,
-  LOGIN: `${CONFIG.BASE_URL}/login`,
-  GET_STORIES: `${CONFIG.BASE_URL}/stories`,
-  ADD_STORY: `${CONFIG.BASE_URL}/stories`,
+  REGISTER: `${CONFIG.BASE_URL}register`,
+  LOGIN: `${CONFIG.BASE_URL}login`,
+  GET_STORIES: `${CONFIG.BASE_URL}stories`,
+  ADD_STORY: `${CONFIG.BASE_URL}stories`,
 };
 
 class StoryApi {
@@ -17,7 +17,6 @@ class StoryApi {
       },
       body: JSON.stringify({ name, email, password }),
     });
-
     return response.json();
   }
 
@@ -29,32 +28,22 @@ class StoryApi {
       },
       body: JSON.stringify({ email, password }),
     });
-
     return response.json();
   }
 
   static async getAllStories() {
-    const token = Auth.getToken();
-    if (!token) {
-      return Promise.reject(new Error('Unauthorized'));
-    }
-
+    const token = Auth.getToken(); 
     const response = await fetch(`${API_ENDPOINTS.GET_STORIES}?location=1`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.json();
   }
 
   static async addNewStory(formData) {
     const token = Auth.getToken();
-    if (!token) {
-      return Promise.reject(new Error('Unauthorized'));
-    }
-
     const response = await fetch(API_ENDPOINTS.ADD_STORY, {
       method: 'POST',
       headers: {
@@ -62,7 +51,6 @@ class StoryApi {
       },
       body: formData,
     });
-
     return response.json();
   }
 
@@ -76,7 +64,6 @@ class StoryApi {
       },
       body: JSON.stringify(subscription),
     });
-
     return response.json();
   }
 }

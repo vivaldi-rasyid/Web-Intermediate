@@ -1,60 +1,55 @@
 import StoryApi from '../../data/api';
 
-export default class RegisterPage {
+const RegisterPage = {
   async render() {
     return `
       <section class="container auth-container">
-        <h1>Register</h1>
-        <form id="register-form" class="auth-form">
+        <h2 class="auth-title">Register</h2>
+        <form id="registerForm" class="auth-form">
           <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" required>
+            <label for="name" class="form-label">Nama</label>
+            <input type="text" id="name" class="form-control" required placeholder="Nama Lengkap">
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" required placeholder="Email Aktif">
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" required minlength="8">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" required minlength="8" placeholder="Minimal 8 karakter">
           </div>
-          <button type="submit">Register</button>
-          <p class="auth-switch">Sudah punya akun? <a href="#/login">Login di sini</a></p>
-          <p id="error-message" class="error-message" aria-live="polite"></p>
-          <p id="success-message" class="success-message" aria-live="polite"></p>
+          <button type="submit" class="btn btn-primary btn-block">Daftar</button>
         </form>
+        <p class="auth-footer">Sudah punya akun? <a href="#/login">Login di sini</a></p>
       </section>
     `;
-  }
+  },
 
   async afterRender() {
-    document.title = 'Register - App';
-    const registerForm = document.querySelector('#register-form');
-    const errorMessage = document.querySelector('#error-message');
-    const successMessage = document.querySelector('#success-message');
-
+    const registerForm = document.querySelector('#registerForm');
+    
     registerForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+      
       const name = document.querySelector('#name').value;
       const email = document.querySelector('#email').value;
       const password = document.querySelector('#password').value;
 
-      errorMessage.textContent = '';
-      successMessage.textContent = '';
-
       try {
         const response = await StoryApi.register({ name, email, password });
-        if (response.error) {
-          throw new Error(response.message);
-        }
-
-        successMessage.textContent = 'Registrasi berhasil! Silakan login.';
-        setTimeout(() => {
+        
+        if (!response.error) {
+          alert('Registrasi berhasil! Silakan login.');
           window.location.hash = '#/login';
-        }, 2000);
+        } else {
+          alert(`Registrasi gagal: ${response.message}`);
+        }
       } catch (error) {
-        errorMessage.textContent = `Registrasi Gagal: ${error.message}`;
+        console.error(error);
+        alert('Terjadi kesalahan saat registrasi.');
       }
     });
-  }
-}
+  },
+};
+
+export default RegisterPage;

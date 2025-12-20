@@ -1,12 +1,9 @@
 import L from 'leaflet';
 import StoryApi from '../../data/api';
-import { showFormattedDate } from '../../utils/index';
 import FavoriteStoryIdb from '../../data/favorite-story-idb';
+import { showFormattedDate } from '../../utils/index';
 
-export default class HomePage {
-  #map = null;
-  #stories = [];
-
+const HomePage = {
   async render() {
     return `
       <section class="container home-container">
@@ -20,45 +17,59 @@ export default class HomePage {
         </div>
       </section>
     `;
-  }
+  },
 
   async afterRender() {
-    document.title = 'Home - App';
+    document.title = 'Home - Story App';
     
     try {
       const response = await StoryApi.getAllStories();
       if (response.error) {
         throw new Error(response.message);
       }
-      this.#stories = response.listStory;
       
-      this._initMap();
-      this._renderStoryList();
-      this._populateMarkers();
+      const stories = response.listStory;
+      
+      this._initMap(stories);
+      this._renderStoryList(stories);
     } catch (error) {
-      document.querySelector('#story-list-container').innerHTML = `<p class="error-message">Gagal memuat data: ${error.message}</p>`;
+      const container = document.querySelector('#story-list-container');
+      if (container) {
+        container.innerHTML = `<p class="error-message">Gagal memuat data: ${error.message}</p>`;
+      }
     }
-  }
+  },
 
-  _initMap() {
+  _initMap(stories) {
     const defaultCoords = [-2.5489, 118.0149];
-    this.#map = L.map('map').setView(defaultCoords, 5);
+    const map = L.map('map').setView(defaultCoords, 5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(this.#map);
-  }
+    }).addTo(map);
 
-  _renderStoryList() {
+    stories.forEach((story) => {
+      if (story.lat && story.lon) {
+        L.marker([story.lat, story.lon])
+          .addTo(map)
+          .bindPopup(`
+            <b>${story.name}</b><br>
+            ${story.description.substring(0, 50)}...
+          `);
+      }
+    });
+  },
+
+  _renderStoryList(stories) {
     const container = document.querySelector('#story-list-container');
     container.innerHTML = '';
 
-    if (this.#stories.length === 0) {
+    if (stories.length === 0) {
       container.innerHTML = '<p>Belum ada cerita untuk ditampilkan.</p>';
       return;
     }
 
-    this.#stories.forEach((story) => {
+    stories.forEach((story) => {
       const storyItem = document.createElement('article');
       storyItem.classList.add('story-item');
       
@@ -68,14 +79,12 @@ export default class HomePage {
           <h3 class="story-item__name">${story.name}</h3>
           <p class="story-item__date">${showFormattedDate(story.createdAt)}</p>
           <p class="story-item__description">${story.description}</p>
-          
           <button class="btn-favorite" style="margin-top: 10px; padding: 8px 16px; background-color: #d84315; color: white; border: none; border-radius: 4px; cursor: pointer;">
             ❤️ Simpan ke Favorit
           </button>
         </div>
       `;
 
-      // Event Listener Tombol Simpan
       const saveBtn = storyItem.querySelector('.btn-favorite');
       saveBtn.addEventListener('click', async () => {
         await FavoriteStoryIdb.putStory(story);
@@ -84,18 +93,7 @@ export default class HomePage {
 
       container.appendChild(storyItem);
     });
-  }
+  },
+};
 
-  _populateMarkers() {
-    this.#stories.forEach((story) => {
-      if (story.lat && story.lon) {
-        L.marker([story.lat, story.lon])
-          .addTo(this.#map)
-          .bindPopup(`
-            <b>${story.name}</b><br>
-            ${story.description.substring(0, 50)}...
-          `);
-      }
-    });
-  }
-}
+export default HomePage;

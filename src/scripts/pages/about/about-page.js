@@ -1,18 +1,17 @@
-export default class AboutPage {
+const AboutPage = {
   async render() {
     return `
-      <section class="container auth-container">
-        <h1>Tentang Story</h1>
-        <p style="text-align: center; line-height: 1.6; margin-top: 16px;">
-          <strong>Story</strong> adalah sebuah aplikasi sederhana.
-          Aplikasi ini memungkinkan pengguna untuk berbagi cerita
-          dan menandai lokasi mereka di peta.
-        </p>
+      <section class="container">
+        <h2>About Us</h2>
+        <p>Aplikasi Story App ini dibuat untuk memenuhi submission Dicoding.</p>
+        <p>Dibangun dengan oleh Muhammad Vivaldi Rasyid.</p>
       </section>
     `;
-  }
+  },
 
   async afterRender() {
-    document.title = 'About - Story';
-  }
-}
+    // Tidak ada logika khusus
+  },
+};
+
+export default AboutPage;
