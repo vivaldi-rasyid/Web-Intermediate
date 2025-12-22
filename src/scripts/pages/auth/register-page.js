@@ -4,7 +4,7 @@ const RegisterPage = {
   async render() {
     return `
       <section class="container auth-container">
-        <h2 class="auth-title">Register</h2>
+        <h1 class="auth-title">Register</h1>
         <form id="registerForm" class="auth-form">
           <div class="form-group">
             <label for="name" class="form-label">Nama</label>

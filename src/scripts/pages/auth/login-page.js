@@ -5,7 +5,7 @@ const LoginPage = {
   async render() {
     return `
       <section class="container auth-container">
-        <h2 class="auth-title">Login</h2>
+        <h1 class="auth-title">Login</h1>
         <form id="loginForm" class="auth-form">
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
