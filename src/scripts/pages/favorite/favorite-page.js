@@ -5,7 +5,7 @@ const FavoritePage = {
   async render() {
     return `
       <section class="container">
-        <h2 class="story-list-title">Cerita Favorit Saya</h2>
+        <h1 class="story-list-title">Cerita Favorit Saya</h1>
         <div id="favorite-list" class="story-list">
           <p>Memuat favorit...</p>
         </div>

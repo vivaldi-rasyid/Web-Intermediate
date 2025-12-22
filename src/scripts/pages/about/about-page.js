@@ -2,7 +2,7 @@ const AboutPage = {
   async render() {
     return `
       <section class="container">
-        <h2>About Us</h2>
+        <h1>About Us</h1>
         <p>Aplikasi Story App ini dibuat untuk memenuhi submission Dicoding.</p>
         <p>Dibangun dengan oleh Muhammad Vivaldi Rasyid.</p>
       </section>
